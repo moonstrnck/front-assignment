@@ -1,0 +1,16 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "장보기",
+      "description": "우유, 계란, 빵, 야채 사기",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "title": "운동하기",
+      "description": "30분 조깅, 10분 스트레칭",
+      "completed": false
+    }
+  ]
+}
