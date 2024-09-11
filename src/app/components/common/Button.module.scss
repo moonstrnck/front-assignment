@@ -1,0 +1,47 @@
+.button {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    opacity 0.3s;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.dangerous {
+  background-color: var(--dangerous);
+  color: var(--black);
+  border: 1px solid var(--black);
+}
+
+.small {
+  min-width: 40px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.medium {
+  min-width: 60px;
+  height: 35px;
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.large {
+  padding: 10px 20px;
+  font-size: 16px;
+}

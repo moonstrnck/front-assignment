@@ -1,0 +1,32 @@
+.todoItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.todoContent {
+  flex-grow: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+}
+
+.todoActions {
+  display: flex;
+  gap: 10px;
+}
+
+.todoItemCheckmark {
+  margin-top: -23px;
+}

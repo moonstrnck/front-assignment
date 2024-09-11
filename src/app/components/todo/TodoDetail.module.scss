@@ -1,0 +1,99 @@
+.todoDetail {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background-color: #fff;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .leftSection {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  .input,
+  .textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    transition: all 0.3s ease;
+
+    &.disabled {
+      border-color: transparent;
+      background-color: transparent;
+      cursor: default;
+    }
+  }
+
+  .titleInput {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0;
+
+    &.disabled {
+      color: #333;
+    }
+  }
+
+  .textarea {
+    min-height: 150px;
+    resize: vertical;
+    margin-bottom: 20px;
+
+    &.disabled {
+      color: #333;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+
+    .footerButtons {
+      display: flex;
+      gap: 10px;
+    }
+  }
+}
+
+.todoDetailCheckmark {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .todoDetail {
+    padding: 15px;
+
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+
+      .leftSection {
+        margin-bottom: 10px;
+        width: 100%;
+      }
+
+      .actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
