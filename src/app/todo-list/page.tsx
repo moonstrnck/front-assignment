@@ -1,4 +1,4 @@
-import getTodos from '@/lib/api';
+import { getTodos } from '@/lib/api';
 import TodoList from '@/app/components/todo/TodoList';
 
 export default async function TodoListPage() {
