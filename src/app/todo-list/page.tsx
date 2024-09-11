@@ -1,9 +1,17 @@
+import { Suspense } from 'react';
 import { getTodos } from '@/lib/api';
 import TodoList from '@/app/components/todo/TodoList';
+import Loading from '@/app/loading';
+
+async function TodoListContent() {
+  const initialTodos = await getTodos();
+  return <TodoList initialTodos={initialTodos} />;
+}
 
 export default async function TodoListPage() {
-  const initialTodos = await getTodos();
-  console.log(initialTodos);
-
-  return <TodoList initialTodos={initialTodos} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <TodoListContent />
+    </Suspense>
+  );
 }
