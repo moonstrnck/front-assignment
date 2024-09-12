@@ -5,6 +5,8 @@ import Button from '@/app/components/common/Button';
 import AlertDialog from '@/app/components/common/AlertDialog';
 import styles from '@/app/components/todo/TodoDialog.module.scss';
 
+import { DIALOG_MESSAGES } from '@/lib/constants';
+
 type TodoDialogProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -89,7 +91,7 @@ function TodoDialog({
               <button
                 type="button"
                 className={styles.closeButton}
-                aria-label="Close"
+                aria-label="닫기"
               >
                 ×
               </button>
@@ -102,8 +104,8 @@ function TodoDialog({
         isOpen={isAlertOpen}
         onClose={handleCancelClose}
         onConfirm={handleConfirmClose}
-        title="변경사항이 있습니다"
-        description="수정을 취소할까요?"
+        title={DIALOG_MESSAGES.CONFIRM_DISCARD_CHANGES.TITLE}
+        description={DIALOG_MESSAGES.CONFIRM_DISCARD_CHANGES.DESCRIPTION}
       />
     </>
   );
