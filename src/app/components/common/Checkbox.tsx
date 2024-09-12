@@ -23,7 +23,7 @@ function Checkbox({ label, className, id, ...props }: CheckboxProps) {
         {...props}
       />
       <label htmlFor={checkboxId} className={styles.label}>
-        <span className={checkmarkClass} />
+        <span className={checkmarkClass} data-testid="checkmark" />
         {label && <span className={styles.labelText}>{label}</span>}
       </label>
     </div>
