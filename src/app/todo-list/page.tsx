@@ -1,7 +1,9 @@
 import { Suspense } from 'react';
-import { getTodos } from '@/lib/api';
+
 import TodoList from '@/app/components/todo/TodoList';
 import Loading from '@/app/loading';
+
+import { getTodos } from '@/lib/api';
 
 async function TodoListContent() {
   const initialTodos = await getTodos();
