@@ -10,4 +10,8 @@ export const ERROR_MESSAGES = {
 
 export const DIALOG_MESSAGES = {
   CONFIRM_DELETE: '할 일을 정말 삭제할까요?',
+  CONFIRM_DISCARD_CHANGES: {
+    TITLE: '변경사항이 있습니다',
+    DESCRIPTION: '수정을 취소할까요?',
+  },
 };
