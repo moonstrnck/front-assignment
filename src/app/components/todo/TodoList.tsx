@@ -68,10 +68,12 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   return (
     <>
       <div className={styles.header}>
-        <h1>Todo List</h1>
-        <Button theme="primary" onClick={() => setIsDialogOpen(true)}>
-          할 일 추가
-        </Button>
+        <div className={styles.headerInner}>
+          <h1>Todo List</h1>
+          <Button theme="primary" onClick={() => setIsDialogOpen(true)}>
+            할 일 추가
+          </Button>
+        </div>
       </div>
       <div className={styles.container}>
         <div className={styles.todoList}>
