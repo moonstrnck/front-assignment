@@ -5,7 +5,7 @@ import Button from '@/app/components/common/Button';
 import AlertDialog from '@/app/components/common/AlertDialog';
 import styles from '@/app/components/todo/TodoDialog.module.scss';
 
-import { DIALOG_MESSAGES } from '@/lib/constants';
+import { ERROR_MESSAGES, DIALOG_MESSAGES } from '@/lib/constants';
 
 type TodoDialogProps = {
   isOpen: boolean;
@@ -28,6 +28,7 @@ function TodoDialog({
   const [content, setContent] = useState(initialDescription);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setHasChanges(title !== initialTitle || content !== initialDescription);
@@ -35,8 +36,15 @@ function TodoDialog({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(title, content);
-    onClose();
+    if (title.trim() && content.trim()) {
+      onSubmit(title, content);
+      setTitle('');
+      setContent('');
+      setHasChanges(false);
+      onClose();
+    } else {
+      setErrorMessage('제목과 내용을 모두 입력해주세요.');
+    }
   };
 
   const handleClose = () => {
@@ -56,6 +64,10 @@ function TodoDialog({
 
   const handleCancelClose = () => {
     setIsAlertOpen(false);
+  };
+
+  const handleErrorClose = () => {
+    setErrorMessage(null);
   };
 
   return (
@@ -106,6 +118,14 @@ function TodoDialog({
         onConfirm={handleConfirmClose}
         title={DIALOG_MESSAGES.CONFIRM_DISCARD_CHANGES.TITLE}
         description={DIALOG_MESSAGES.CONFIRM_DISCARD_CHANGES.DESCRIPTION}
+      />
+      <AlertDialog
+        isOpen={!!errorMessage}
+        onClose={handleErrorClose}
+        onConfirm={handleErrorClose}
+        title={ERROR_MESSAGES.ERROR_TITLE}
+        description={errorMessage || ''}
+        isError
       />
     </>
   );
