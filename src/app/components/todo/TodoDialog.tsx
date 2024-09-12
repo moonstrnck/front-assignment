@@ -5,7 +5,7 @@ import Button from '@/app/components/common/Button';
 import AlertDialog from '@/app/components/common/AlertDialog';
 import styles from '@/app/components/todo/TodoDialog.module.scss';
 
-import { ERROR_MESSAGES, DIALOG_MESSAGES } from '@/lib/constants';
+import { DIALOG_MESSAGES } from '@/lib/constants';
 
 type TodoDialogProps = {
   isOpen: boolean;
@@ -123,7 +123,7 @@ function TodoDialog({
         isOpen={!!errorMessage}
         onClose={handleErrorClose}
         onConfirm={handleErrorClose}
-        title={ERROR_MESSAGES.ERROR_TITLE}
+        title="❗️"
         description={errorMessage || ''}
         isError
       />
