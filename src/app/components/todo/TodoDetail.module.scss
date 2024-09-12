@@ -1,10 +1,12 @@
+@use '@/app/styles/_mixins' as mix;
+
 .todoDetail {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 50px auto 0;
   padding: 20px;
   border-radius: 10px;
   border: 1px solid #eee;
-  background-color: #fff;
+  background-color: var(--white);
 
   .header {
     display: flex;
@@ -77,13 +79,16 @@
   margin-top: 0;
 }
 
-@media (max-width: 768px) {
+@include mix.responsive(mobile) {
   .todoDetail {
-    padding: 15px;
+    padding: 0;
+    margin-top: 0;
+    border: none;
 
     .header {
       flex-direction: column;
       align-items: flex-start;
+      margin-bottom: 0;
 
       .leftSection {
         margin-bottom: 10px;

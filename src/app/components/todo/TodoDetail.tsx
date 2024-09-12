@@ -8,27 +8,25 @@ import Checkbox from '@/app/components/common/Checkbox';
 import AlertDialog from '@/app/components/common/AlertDialog';
 import styles from '@/app/components/todo/TodoDetail.module.scss';
 
+import { updateTodo, deleteTodo } from '@/lib/actions';
+import { ERROR_MESSAGES, DIALOG_MESSAGES } from '@/lib/constants';
+
 interface Todo {
   id: string;
   title: string;
-  content: string;
+  description: string;
   completed: boolean;
 }
 
 interface TodoDetailProps {
   todo: Todo;
-  updateTodo: (id: string, title: string, content: string) => Promise<Todo>;
-  deleteTodo: (id: string) => Promise<void>;
 }
 
-export default function TodoDetail({
-  todo: initialTodo,
-  updateTodo,
-  deleteTodo,
-}: TodoDetailProps) {
+export default function TodoDetail({ todo: initialTodo }: TodoDetailProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [todo, setTodo] = useState(initialTodo);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
   const handleEdit = () => {
@@ -41,14 +39,31 @@ export default function TodoDetail({
   };
 
   const handleSave = async () => {
-    const updatedTodo = await updateTodo(todo.id, todo.title, todo.content);
-    setTodo(updatedTodo);
-    setIsEditing(false);
+    try {
+      const updatedTodo = await updateTodo(
+        todo.id,
+        todo.title,
+        todo.description,
+        todo.completed
+      );
+      setTodo(updatedTodo);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+      setErrorMessage(ERROR_MESSAGES.UPDATE_TODO);
+    }
   };
 
   const handleDelete = async () => {
-    await deleteTodo(todo.id);
-    router.push('/todo-list');
+    setIsDeleteDialogOpen(false);
+
+    try {
+      await deleteTodo(todo.id);
+      router.push('/todo-list');
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+      setErrorMessage(ERROR_MESSAGES.DELETE_TODO);
+    }
   };
 
   const handleBack = () => {
@@ -57,6 +72,10 @@ export default function TodoDetail({
     } else {
       router.push('/todo-list');
     }
+  };
+
+  const handleErrorClose = () => {
+    setErrorMessage(null);
   };
 
   return (
@@ -81,14 +100,14 @@ export default function TodoDetail({
       </div>
 
       <textarea
-        value={todo.content}
-        onChange={(e) => setTodo({ ...todo, content: e.target.value })}
+        value={todo.description}
+        onChange={(e) => setTodo({ ...todo, description: e.target.value })}
         disabled={!isEditing}
         className={`${styles.textarea} ${!isEditing ? styles.disabled : ''}`}
       />
 
       <div className={styles.footer}>
-        <Button onClick={handleBack}>{isEditing ? '취소' : '이전'}</Button>
+        <Button onClick={handleBack}>이전</Button>
         <div className={styles.footerButtons}>
           {isEditing ? (
             <Button onClick={handleSave}>확인</Button>
@@ -110,9 +129,15 @@ export default function TodoDetail({
         isOpen={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDelete}
-        title="할 일을 정말 삭제할까요?"
-        cancelText="취소"
-        confirmText="확인"
+        title={DIALOG_MESSAGES.CONFIRM_DELETE}
+      />
+      <AlertDialog
+        isOpen={!!errorMessage}
+        onClose={handleErrorClose}
+        onConfirm={handleErrorClose}
+        title={ERROR_MESSAGES.ERROR_TITLE}
+        description={errorMessage || ''}
+        isError
       />
     </div>
   );
