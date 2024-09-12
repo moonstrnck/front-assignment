@@ -10,6 +10,7 @@ interface AlertDialogProps {
   description?: string;
   cancelText?: string;
   confirmText?: string;
+  isError?: boolean;
 }
 
 function AlertDialog({
@@ -20,13 +21,16 @@ function AlertDialog({
   description,
   cancelText = '취소',
   confirmText = '확인',
+  isError = false,
 }: AlertDialogProps): React.ReactElement {
   return (
     <AlertDialogPrimitive.Root open={isOpen} onOpenChange={onClose}>
       <AlertDialogPrimitive.Portal>
         <AlertDialogPrimitive.Overlay className={styles.alertDialogOverlay} />
         <AlertDialogPrimitive.Content className={styles.alertDialogContent}>
-          <AlertDialogPrimitive.Title className={styles.alertDialogTitle}>
+          <AlertDialogPrimitive.Title
+            className={`${styles.alertDialogTitle} ${isError ? styles.errorTitle : ''}`}
+          >
             {title}
           </AlertDialogPrimitive.Title>
           {description && (
@@ -37,11 +41,13 @@ function AlertDialog({
             </AlertDialogPrimitive.Description>
           )}
           <div className={styles.alertDialogActions}>
-            <AlertDialogPrimitive.Cancel asChild>
-              <Button onClick={onClose} theme="dangerous" size="small">
-                {cancelText}
-              </Button>
-            </AlertDialogPrimitive.Cancel>
+            {!isError && (
+              <AlertDialogPrimitive.Cancel asChild>
+                <Button onClick={onClose} theme="dangerous" size="small">
+                  {cancelText}
+                </Button>
+              </AlertDialogPrimitive.Cancel>
+            )}
             <AlertDialogPrimitive.Action asChild>
               <Button onClick={onConfirm} theme="primary" size="small">
                 {confirmText}

@@ -40,6 +40,10 @@
   gap: 10px;
 }
 
+.errorTitle {
+  color: var(--color-error);
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
