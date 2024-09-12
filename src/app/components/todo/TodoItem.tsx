@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation';
 
 import Checkbox from '@/app/components/common/Checkbox';
 import Button from '@/app/components/common/Button';
+import Spinner from '@/app/components/common/Spinner';
 import AlertDialog from '@/app/components/common/AlertDialog';
 import TodoDialog from '@/app/components/todo/TodoDialog';
 import styles from '@/app/components/todo/TodoItem.module.scss';
+
+import { deleteTodo, updateTodo, updateTodoCompletion } from '@/lib/actions';
+import { ERROR_MESSAGES, DIALOG_MESSAGES } from '@/lib/constants';
 
 interface TodoItemProps {
   id: string;
@@ -15,6 +19,7 @@ interface TodoItemProps {
   description: string;
   initialCompleted: boolean;
   onDelete: (id: string) => void;
+  onUpdate: (id: string, title: string, description: string) => void;
 }
 
 function TodoItem({
@@ -23,24 +28,60 @@ function TodoItem({
   description,
   initialCompleted,
   onDelete,
+  onUpdate,
 }: TodoItemProps) {
   const [isCompleted, setIsCompleted] = useState(initialCompleted);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleCompletionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    setIsCompleted(!isCompleted);
+  const handleCompletionChange = async () => {
+    setIsLoading(true);
+    try {
+      const newCompletionStatus = !isCompleted;
+      const updatedTodo = await updateTodoCompletion(id, newCompletionStatus);
+      setIsCompleted(updatedTodo.completed);
+    } catch (error) {
+      console.error('Failed to update todo completion status:', error);
+      setErrorMessage(ERROR_MESSAGES.UPDATE_TODO);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleUpdate = (newTitle: string, newContent: string) => {
-    console.log('Updating todo:', id, newTitle, newContent);
+  const handleUpdate = async (newTitle: string, newDescription: string) => {
+    setIsLoading(true);
+    try {
+      const updatedTodo = await updateTodo(
+        id,
+        newTitle,
+        newDescription,
+        isCompleted
+      );
+      onUpdate(id, updatedTodo.title, updatedTodo.description);
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+      setErrorMessage(ERROR_MESSAGES.UPDATE_TODO);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    onDelete(id);
-    setIsAlertOpen(false);
+  const handleDeleteConfirm = async () => {
+    setIsLoading(true);
+    try {
+      await deleteTodo(id);
+      onDelete(id);
+      setIsAlertOpen(false);
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+      setErrorMessage(ERROR_MESSAGES.DELETE_TODO);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -53,13 +94,16 @@ function TodoItem({
     }
   };
 
+  const handleErrorClose = () => {
+    setErrorMessage(null);
+  };
+
   return (
     <div className={styles.todoItem} onClick={handleItemClick}>
       <Checkbox
         checked={isCompleted}
         className={styles.todoItemCheckmark}
         onChange={handleCompletionChange}
-        onClick={(e) => e.stopPropagation()}
       />
       <div className={styles.todoContent}>
         <h3>{title}</h3>
@@ -69,8 +113,7 @@ function TodoItem({
         <Button
           theme="primary"
           size="small"
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
             setIsDialogOpen(true);
           }}
         >
@@ -79,8 +122,7 @@ function TodoItem({
         <Button
           theme="dangerous"
           size="small"
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
             setIsAlertOpen(true);
           }}
         >
@@ -99,10 +141,17 @@ function TodoItem({
         isOpen={isAlertOpen}
         onClose={() => setIsAlertOpen(false)}
         onConfirm={handleDeleteConfirm}
-        title="할 일을 정말 삭제할까요?"
-        cancelText="취소"
-        confirmText="확인"
+        title={DIALOG_MESSAGES.CONFIRM_DELETE}
       />
+      <AlertDialog
+        isOpen={!!errorMessage}
+        onClose={handleErrorClose}
+        onConfirm={handleErrorClose}
+        title={ERROR_MESSAGES.ERROR_TITLE}
+        description={errorMessage || ''}
+        isError
+      />
+      {isLoading && <Spinner />}
     </div>
   );
 }
