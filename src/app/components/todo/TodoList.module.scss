@@ -2,14 +2,19 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  padding-top: 75px;
   box-sizing: border-box;
 }
 
 .header {
+  z-index: 10;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 20px;
+  width: 100%;
+  background-color: var(--white);
 
   h1 {
     margin: 0;

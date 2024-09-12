@@ -66,41 +66,43 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   };
 
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.header}>
         <h1>Todo List</h1>
         <Button theme="primary" onClick={() => setIsDialogOpen(true)}>
           할 일 추가
         </Button>
       </div>
-      <div className={styles.todoList}>
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            id={todo.id}
-            title={todo.title}
-            description={todo.description}
-            initialCompleted={todo.completed}
-            onDelete={handleDeleteTodo}
-            onUpdate={handleUpdateTodo}
-          />
-        ))}
+      <div className={styles.container}>
+        <div className={styles.todoList}>
+          {todos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              id={todo.id}
+              title={todo.title}
+              description={todo.description}
+              initialCompleted={todo.completed}
+              onDelete={handleDeleteTodo}
+              onUpdate={handleUpdateTodo}
+            />
+          ))}
+        </div>
+        <TodoDialog
+          isOpen={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          onSubmit={handleCreateTodo}
+          mode="create"
+        />
+        <AlertDialog
+          isOpen={!!errorMessage}
+          onClose={handleErrorClose}
+          onConfirm={handleErrorClose}
+          title={ERROR_MESSAGES.ERROR_TITLE}
+          description={errorMessage || ''}
+          isError
+        />
+        {isLoading && <Spinner />}
       </div>
-      <TodoDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onSubmit={handleCreateTodo}
-        mode="create"
-      />
-      <AlertDialog
-        isOpen={!!errorMessage}
-        onClose={handleErrorClose}
-        onConfirm={handleErrorClose}
-        title={ERROR_MESSAGES.ERROR_TITLE}
-        description={errorMessage || ''}
-        isError
-      />
-      {isLoading && <Spinner />}
-    </div>
+    </>
   );
 }
