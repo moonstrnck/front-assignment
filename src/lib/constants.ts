@@ -4,6 +4,7 @@ export const ERROR_MESSAGES = {
   ERROR_TITLE: '❗️ 오류',
   UPDATE_TODO: '할 일 업데이트에 실패했습니다. 다시 시도해 주세요.',
   DELETE_TODO: '할 일 삭제에 실패했습니다. 다시 시도해 주세요.',
+  CREATE_TODO: '할 일 생성에 실패했습니다. 다시 시도해 주세요.',
   GENERIC_ERROR: '오류가 발생했습니다. 다시 시도해 주세요.',
 };
 
